@@ -11,7 +11,7 @@ app.get('/health', (req, res) => {
 })
 
 app.get('/version', (req, res) => {
-  res.send(process.env.APP_REVISION || 'development')
+  res.send(process.env.APP_REVISION || 'unset')
 })
 
 app.listen(PORT, () => {

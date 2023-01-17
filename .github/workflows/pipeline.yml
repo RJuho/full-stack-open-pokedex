@@ -35,13 +35,13 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deploy to fly
         if: |
-          ${{ github.event_name == 'push' }} ||
+          ${{ github.event_name == 'push' }} &&
           ${{ !contains(join(github.event.commits.*.message, ' '), '#skip') }}
         run: flyctl deploy -e APP_REVISION=$(git rev-parse --short HEAD) --remote-only
   tag_release:
     needs: [simple_deployment_pipeline]
     if: |
-      ${{ github.event_name == 'push' }} ||
+      ${{ github.event_name == 'push' }} &&
       ${{ !contains(join(github.event.commits.*.message, ' '), '#skip') }}
     runs-on: ubuntu-22.04
     steps:
