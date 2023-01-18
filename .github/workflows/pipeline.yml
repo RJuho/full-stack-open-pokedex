@@ -38,6 +38,28 @@ jobs:
           ${{ github.event_name == 'push' }} &&
           ${{ !contains(join(github.event.commits.*.message, ' '), '#skip') }}
         run: flyctl deploy -e APP_REVISION=$(git rev-parse --short HEAD) --remote-only
+      - name: Test Success
+        uses: rjstone/discord-webhook-notify@v1
+        if: success()
+        with:
+            severity: info
+            details: Pipeline was successful!
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Test Failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+            severity: error
+            details: Pipeline failed :(
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Test Cancelled
+        uses: rjstone/discord-webhook-notify@v1
+        if: cancelled()
+        with:
+            severity: warn
+            details: Pipeline cancelled, no need to worry ... I think so
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
   tag_release:
     needs: [simple_deployment_pipeline]
     if: |
@@ -46,7 +68,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.55.0
+        uses: anothrNick/github-tag-action@1.59.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
