@@ -1,3 +1,5 @@
+> Last exercise repository can be found from [https://github.com/RJuho/part11-exercise-pipeline](https://github.com/RJuho/part11-exercise-pipeline)
+
 # Full Stack open CI/CD
 
 This repository is used for the CI/CD module of the Full stack open course
